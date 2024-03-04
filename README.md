@@ -1,7 +1,6 @@
-# Typescript-seed
+# Nest JS Experimentation
 
-Seed project for typescript.
-Use this repository as a template for your typescript projects.
+Try creating a new NestJS project from template using: `nest new example -p npm`.
 
 ## Getting Started
 
@@ -17,24 +16,29 @@ Build the project:
 npm run build
 ```
 
-Run the project:
+Run the project with:
 
 ```bash
 npm start
 ```
 
+It should be available at [localhost:3000](http://localhost:3000).
+
 Test the project using *Jest*:
 
 ```bash
+# To run all the tests
 npm test
-# To test and display the coverage
-npm test:cov
+# To run the e2e tests
+npm test:e2e
+# To run the unit tests
+npm test:unit
 ```
 
 Lint the project using *ESLint*:
 
 ```bash
 npm run lint
-# To fix the linting erros
+# To fix the linting errors
 npm run lint:fix
 ```
