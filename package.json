@@ -4,10 +4,9 @@
   "description": "template project for typescript",
   "scripts": {
     "build": "nest build",
-    "test": "jest",
+    "test": "jest --coverage",
     "test:e2e": "jest --config ./jest.config.e2e.ts",
     "test:unit": "jest --config ./jest.config.unit.ts",
-    "test:cov": "jest --coverage",
     "lint": "eslint --ext .ts src",
     "lint:fix": "eslint --fix src tests --ext=.ts",
     "start": "nest start",
