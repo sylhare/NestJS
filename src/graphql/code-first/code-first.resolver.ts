@@ -8,16 +8,21 @@ export class CodeFirstResolver {
 
   @Mutation(() => CodeFirst)
   createCodeFirst(@Args('createCodeFirstInput') createCodeFirstInput: CreateCodeFirstInput) {
-    return;
+    return { ...new CodeFirst(), exampleField: createCodeFirstInput.exampleField };
   }
 
-  @Query(() => [CodeFirst], { name: 'codeFirst' })
+  @Query(() => [CodeFirst], { name: 'codeFirsts' })
   findAll() {
-    return;
+    return [new CodeFirst()];
+  }
+
+  @Query(() => CodeFirst, { name: 'codeFirst' })
+  findOne(@Args('id', { type: () => Int }) id: number) {
+    return { ...new CodeFirst(), id };
   }
 
   @Mutation(() => CodeFirst)
   updateCodeFirst(@Args('updateCodeFirstInput') updateCodeFirstInput: UpdateCodeFirstInput) {
-    return;
+    return { ...new CodeFirst(), exampleField: updateCodeFirstInput.exampleField };
   }
 }

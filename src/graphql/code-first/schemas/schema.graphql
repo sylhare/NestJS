@@ -2,35 +2,46 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""Code first example"""
 type CodeFirst {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """Example Id"""
+  id: Int!
+
+  """Example Field"""
+  exampleField: String!
+}
+
+"""Book"""
+type Book {
+  """Id of the Book"""
+  id: Int!
+
+  """Title of the Book"""
+  title: String!
+
+  """Author of the Book"""
+  author: String!
 }
 
 type Query {
-  codeFirst2: [CodeFirst!]!
-  codeFirst: [CodeFirst!]!
+  book(id: Int!): Book!
+  codeFirsts: [CodeFirst!]!
+  codeFirst(id: Int!): CodeFirst!
 }
 
 type Mutation {
-  createCodeFirst2(createCodeFirst2Input: CreateCodeFirst2Input!): CodeFirst!
-  updateCodeFirst2(createCodeFirst2Input: CreateCodeFirst2Input!): CodeFirst!
   createCodeFirst(createCodeFirstInput: CreateCodeFirstInput!): CodeFirst!
   updateCodeFirst(updateCodeFirstInput: UpdateCodeFirstInput!): CodeFirst!
 }
 
-input CreateCodeFirst2Input {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
+"""New example field input"""
 input CreateCodeFirstInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """Example field to create"""
+  exampleField: String!
 }
 
+"""Update example field input"""
 input UpdateCodeFirstInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  """Example field to update"""
+  exampleField: String!
 }
