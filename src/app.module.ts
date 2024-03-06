@@ -6,6 +6,7 @@ import { ModuleB } from "./nested/b/b.module";
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
+import { CodeFirstModule } from './graphql/code-first/code-first.module';
 
 @Module({
   imports: [
@@ -17,6 +18,8 @@ import { join } from 'path';
       sortSchema: false,
       autoSchemaFile: join(process.cwd(), 'src/graphql/code-first/schemas/schema.graphql'),
     }),
+    CodeFirstModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

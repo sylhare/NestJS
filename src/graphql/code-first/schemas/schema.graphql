@@ -1,0 +1,36 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type CodeFirst {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Query {
+  codeFirst2: [CodeFirst!]!
+  codeFirst: [CodeFirst!]!
+}
+
+type Mutation {
+  createCodeFirst2(createCodeFirst2Input: CreateCodeFirst2Input!): CodeFirst!
+  updateCodeFirst2(createCodeFirst2Input: CreateCodeFirst2Input!): CodeFirst!
+  createCodeFirst(createCodeFirstInput: CreateCodeFirstInput!): CodeFirst!
+  updateCodeFirst(updateCodeFirstInput: UpdateCodeFirstInput!): CodeFirst!
+}
+
+input CreateCodeFirst2Input {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateCodeFirstInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCodeFirstInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
