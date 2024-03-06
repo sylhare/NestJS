@@ -1,0 +1,21 @@
+type SchemaFirst {
+  # Example field (placeholder)
+  exampleField: String
+}
+
+input CreateSchemaFirstInput {
+  # Example field (placeholder)
+  exampleField: String
+}
+
+type CreateSchemaFirstPayload {
+  schemaFirst: SchemaFirst
+}
+
+type Query {
+  schemaFirst(id: Int!): SchemaFirst
+}
+
+type Mutation {
+  createSchemaFirst(createSchemaFirstInput: CreateSchemaFirstInput!): CreateSchemaFirstPayload!
+}
