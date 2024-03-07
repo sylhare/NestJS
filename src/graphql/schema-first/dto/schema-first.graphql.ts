@@ -13,6 +13,7 @@ export class CreateSchemaFirstInput {
 }
 
 export class SchemaFirst {
+    id: number;
     exampleField?: Nullable<string>;
 }
 

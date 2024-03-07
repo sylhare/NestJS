@@ -1,4 +1,5 @@
 type SchemaFirst {
+  id: Int!
   # Example field (placeholder)
   exampleField: String
 }
