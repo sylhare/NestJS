@@ -1,4 +1,4 @@
-import { CreateCatDto } from "../dtos/create-cat.dto";
+import { CreateCatDto } from '../dtos/create-cat.dto';
 
 export interface Cat {
   name: string;
