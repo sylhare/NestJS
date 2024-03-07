@@ -1,12 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SchemaFirstResolver } from './schema-first.resolver';
+import { SchemaFirstModule } from './schema-first.module';
 
 describe('SchemaFirstResolver', () => {
   let resolver: SchemaFirstResolver;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [SchemaFirstResolver],
+      imports: [SchemaFirstModule],
     }).compile();
 
     resolver = module.get<SchemaFirstResolver>(SchemaFirstResolver);

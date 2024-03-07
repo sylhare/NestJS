@@ -13,7 +13,8 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "graphql:generate": "ts-node src/graphql/schema-first/schemas/generate-typings.ts"
+    "graphql:generate": "ts-node src/graphql/schema-first/schemas/generate-typings.ts",
+    "graphql:print": "ts-node src/graphql/code-first/schemas/generate-schema.ts"
   },
   "author": "",
   "license": "MIT",
@@ -46,6 +47,7 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^10.0.0",
     "graphql": "^16.8.1",
+    "graphql-tag": "^2.12.6",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   }

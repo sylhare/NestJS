@@ -9,7 +9,7 @@ const config: Config.InitialOptions = {
   },
   setupFilesAfterEnv: [],
   testEnvironment: 'node',
-  collectCoverageFrom: ['src/**/*.ts', '!src/main.ts'],
+  collectCoverageFrom: ['src/**/*.ts', '!src/main.ts', '!src/**/schemas/**'],
   coveragePathIgnorePatterns: [],
   coverageReporters: ['text', 'text-summary', 'lcov'],
   coverageThreshold: {

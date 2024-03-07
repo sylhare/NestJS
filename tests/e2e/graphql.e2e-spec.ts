@@ -3,7 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import { gql } from 'graphql-request';
+import { print } from 'graphql';
+import { gql } from 'graphql-tag';
 
 describe('GraphQL', () => {
   let app: INestApplication;
@@ -50,7 +51,7 @@ describe('GraphQL', () => {
       const payload = await request(app.getHttpServer())
         .post('/graphql')
         .send({
-          query: codeFirstQuery,
+          query: print(codeFirstQuery),
           variables: { id: 1 },
         });
       expect(payload.status).toEqual(200);
