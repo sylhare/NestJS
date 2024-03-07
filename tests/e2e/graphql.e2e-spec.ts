@@ -17,6 +17,19 @@ describe('GraphQL', () => {
     await app.init();
   });
 
+  describe('Book', () => {
+    it('queries a book', async () => {
+      const payload = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({
+          user: 'user',
+          query: '{ book(id: 1) { id author title } }',
+        });
+      expect(payload.status).toEqual(200);
+      expect(payload.body.data.book).toEqual({ id: 1, title: 'title', author: 'author' });
+    });
+  });
+
   describe('codeFirst', () => {
     const codeFirstFragment = gql`
       fragment codeFirst on CodeFirst {
