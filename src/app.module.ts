@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
@@ -8,6 +8,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { CodeFirstModule } from './graphql/code-first/code-first.module';
 import { BookResolver } from './book/book.resolver';
+import { GraphqlRateLimiterMiddleware } from './graphql-rate-limiter/graphql-rate-limiter.middleware';
 
 @Module({
   imports: [
@@ -25,4 +26,10 @@ import { BookResolver } from './book/book.resolver';
   controllers: [AppController],
   providers: [AppService, BookResolver],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(GraphqlRateLimiterMiddleware)
+      .forRoutes('graphql');
+  }
+}

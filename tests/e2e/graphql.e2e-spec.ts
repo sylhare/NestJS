@@ -15,10 +15,28 @@ describe('GraphQL', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    await app.init();
+  });
+
+  describe('Rate limiting', () => {
+    beforeEach(async () => {
+      process.env.RATE_LIMIT_POINTS = '0';
+      await app.init();
+    });
+
+    it('should trigger rate limiting', async () => {
+      const payload = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({ user: 'test' });
+      expect(payload.status).toEqual(429);
+    });
   });
 
   describe('Book', () => {
+    beforeEach(async () => {
+      process.env.RATE_LIMIT_POINTS = '100';
+      await app.init();
+    });
+
     it('queries a book', async () => {
       const payload = await request(app.getHttpServer())
         .post('/graphql')
@@ -32,20 +50,24 @@ describe('GraphQL', () => {
   });
 
   describe('codeFirst', () => {
+    beforeEach(async () => {
+      process.env.RATE_LIMIT_POINTS = '100';
+      await app.init();
+    });
     const codeFirstFragment = gql`
-      fragment codeFirst on CodeFirst {
-        id
-        exampleField
-      }
-    `;
+          fragment codeFirst on CodeFirst {
+            id
+            exampleField
+          }
+        `;
     const codeFirstQuery = gql`
-      ${codeFirstFragment}
-      query codeFirst($id: Int!) {
-        codeFirst(id: $id) {
-          ...codeFirst
-        }
-      }
-    `;
+          ${codeFirstFragment}
+          query codeFirst($id: Int!) {
+            codeFirst(id: $id) {
+              ...codeFirst
+            }
+          }
+        `;
 
     it('queries code first', async () => {
       const payload = await request(app.getHttpServer())
