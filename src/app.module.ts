@@ -9,6 +9,7 @@ import { join } from 'path';
 import { CodeFirstModule } from './graphql/code-first/code-first.module';
 import { BookResolver } from './book/book.resolver';
 import { GraphqlRateLimiterMiddleware } from './graphql-rate-limiter/graphql-rate-limiter.middleware';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { GraphqlRateLimiterMiddleware } from './graphql-rate-limiter/graphql-rat
     CodeFirstModule,
   ],
   controllers: [AppController],
-  providers: [AppService, BookResolver],
+  providers: [AppService, BookResolver, ConfigService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

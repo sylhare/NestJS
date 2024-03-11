@@ -51,7 +51,7 @@ describe('GraphQL', () => {
 
   describe('codeFirst', () => {
     beforeEach(async () => {
-      process.env.RATE_LIMIT_POINTS = '100';
+      process.env.RATE_LIMIT_POINTS = undefined;
       await app.init();
     });
     const codeFirstFragment = gql`

@@ -1,4 +1,4 @@
-# Nest JS Experimentation
+# Nest JS Experimentation [![NestJS CI](https://github.com/sylhare/NestJS/actions/workflows/NestJS.yml/badge.svg)](https://github.com/sylhare/NestJS/actions/workflows/NestJS.yml)
 
 Try creating a new NestJS project from template using: `nest new example -p npm`.
 

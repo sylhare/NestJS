@@ -2,21 +2,21 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { RateLimiterRedis } from 'rate-limiter-flexible';
 import RedisMock from 'ioredis-mock';
-import * as process from 'process';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class GraphqlRateLimiterMiddleware implements NestMiddleware {
 
   private readonly limiter: RateLimiterRedis;
 
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
     const redisClient = new RedisMock();
 
     this.limiter = new RateLimiterRedis({
       storeClient: redisClient,
-      points: parseInt(process.env.RATE_LIMIT_POINTS ?? '100'),      // max request by duration
-      duration: parseInt(process.env.RATE_LIMIT_DURATION ?? '1'),    // per second
-      blockDuration: parseInt(process.env.RATE_LIMIT_BLOCK ?? '60'), // blocks for x second once rate exceeded
+      points: this.configService.get<number>('RATE_LIMIT_POINTS', 100),      // max request by duration
+      duration: this.configService.get<number>('RATE_LIMIT_DURATION', 1),    // per second
+      blockDuration: this.configService.get<number>('RATE_LIMIT_BLOCK', 60), // blocks for x second once rate exceeded
       keyPrefix: 'ratelimit',
     });
   }
