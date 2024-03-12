@@ -8,8 +8,11 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { CodeFirstModule } from './graphql/code-first/code-first.module';
 import { BookResolver } from './book/book.resolver';
-import { GraphqlRateLimiterMiddleware } from './graphql-rate-limiter/graphql-rate-limiter.middleware';
+import { GraphqlRateLimiterMiddleware } from './graphql/graphql-rate-limiter/graphql-rate-limiter.middleware';
 import { ConfigService } from '@nestjs/config';
+import { RequestInfoPlugin } from './graphql/plugins/RequestInfo.plugin';
+
+export type AppContext = { hello: string };
 
 @Module({
   imports: [
@@ -20,7 +23,8 @@ import { ConfigService } from '@nestjs/config';
       playground: true,
       sortSchema: false,
       autoSchemaFile: join(process.cwd(), 'src/graphql/code-first/schemas/schema.graphql'),
-      context: ({ req }) => ({ hello: `Hello ${req.body.user}` }),
+      context: ({ req }): AppContext => ({ hello: `Hello ${req.body.user}` }),
+      plugins: [new RequestInfoPlugin()],
     }),
     CodeFirstModule,
   ],
