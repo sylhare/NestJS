@@ -3,14 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
 import { ModuleB } from './nested/b/b.module';
-import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { join } from 'path';
-import { CodeFirstModule } from './graphql/code-first/code-first.module';
 import { BookResolver } from './book/book.resolver';
-import { GraphqlRateLimiterMiddleware } from './graphql/graphql-rate-limiter/graphql-rate-limiter.middleware';
 import { ConfigService } from '@nestjs/config';
-import { RequestInfoPlugin } from './graphql/plugins/RequestInfo.plugin';
+import { GraphqlModule } from './graphql/graphql.module';
 
 export type AppContext = { hello: string };
 
@@ -18,23 +13,17 @@ export type AppContext = { hello: string };
   imports: [
     CatsModule,
     ModuleB,
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      playground: true,
-      sortSchema: false,
-      autoSchemaFile: join(process.cwd(), 'src/graphql/code-first/schemas/schema.graphql'),
-      context: ({ req }): AppContext => ({ hello: `Hello ${req.body.user}` }),
-      plugins: [new RequestInfoPlugin()],
-    }),
-    CodeFirstModule,
+    GraphqlModule,
   ],
   controllers: [AppController],
-  providers: [AppService, BookResolver, ConfigService],
+  providers: [
+    AppService,
+    BookResolver,
+    ConfigService,
+  ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(GraphqlRateLimiterMiddleware)
-      .forRoutes('graphql');
+    GraphqlModule.addGraphQLRateLimiter(consumer);
   }
 }
