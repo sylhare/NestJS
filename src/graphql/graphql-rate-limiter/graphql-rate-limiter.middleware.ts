@@ -1,9 +1,19 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { RateLimiterRedis } from 'rate-limiter-flexible';
 import RedisMock from 'ioredis-mock';
 import { ConfigService } from '@nestjs/config';
 
+/**
+ * In AppModule, apply it using:
+ * ```
+ *   configure(consumer: MiddlewareConsumer) {
+ *     consumer
+ *       .apply(GraphqlRateLimiterMiddleware)
+ *       .forRoutes('graphql');
+ *   }
+ * ```
+ */
 @Injectable()
 export class GraphqlRateLimiterMiddleware implements NestMiddleware {
 
@@ -27,7 +37,7 @@ export class GraphqlRateLimiterMiddleware implements NestMiddleware {
       next();
     } catch (rateLimitingException) {
       console.log(rateLimitingException);
-      res.status(429).send('Too Many Requests');
+      res.status(HttpStatus.TOO_MANY_REQUESTS).send('Too Many Requests');
     }
   }
 }

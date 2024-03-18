@@ -2,15 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-"""Code first example"""
-type CodeFirst {
-  """Example Id"""
-  id: Int!
-
-  """Example Field"""
-  exampleField: String!
-}
-
 """Book"""
 type Book {
   """Id of the Book"""
@@ -21,6 +12,15 @@ type Book {
 
   """Author of the Book"""
   author: String!
+}
+
+"""Code first example"""
+type CodeFirst {
+  """Example Id"""
+  id: Int!
+
+  """Example Field"""
+  exampleField: String!
 }
 
 type Query {

@@ -26,7 +26,7 @@ describe('GraphQL', () => {
     it('should trigger rate limiting', async () => {
       const payload = await request(app.getHttpServer())
         .post('/graphql')
-        .send({ user: 'test' });
+        .send({ user: 'test', query: '{ book(id: 1) { id author title } }' });
       expect(payload.status).toEqual(429);
     });
   });
@@ -51,7 +51,6 @@ describe('GraphQL', () => {
 
   describe('codeFirst', () => {
     beforeEach(async () => {
-      process.env.RATE_LIMIT_POINTS = undefined;
       await app.init();
     });
     const codeFirstFragment = gql`
