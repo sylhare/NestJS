@@ -32,7 +32,7 @@ describe('CodeFirstResolver', () => {
   });
 
   it('should update a code first', () => {
-    const result = resolver.updateCodeFirst({ exampleField: 'other' });
+    const result = resolver.updateCodeFirst({ id: 1, exampleField: 'other' });
     expect(result).toEqual({ id: 1, exampleField: 'other', notAGraphQLField: 'not a graphql field', });
   });
 });

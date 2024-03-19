@@ -44,4 +44,7 @@ input CreateCodeFirstInput {
 input UpdateCodeFirstInput {
   """Example field to update"""
   exampleField: String!
+
+  """Example id to update"""
+  id: Int!
 }

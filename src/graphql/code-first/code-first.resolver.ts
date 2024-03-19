@@ -26,6 +26,6 @@ export class CodeFirstResolver {
 
   @Mutation(() => CodeFirst)
   updateCodeFirst(@Args('updateCodeFirstInput') updateCodeFirstInput: UpdateCodeFirstInput) {
-    return { ...new CodeFirst(), exampleField: updateCodeFirstInput.exampleField };
+    return { ...new CodeFirst(), id: updateCodeFirstInput.id, exampleField: updateCodeFirstInput.exampleField };
   }
 }
