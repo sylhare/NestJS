@@ -36,7 +36,7 @@ export class GraphqlRateLimiterMiddleware implements NestMiddleware {
       await this.limiter.consume(req.user ?? 'anonymous');
       next();
     } catch (rateLimitingException) {
-      console.log(rateLimitingException);
+      console.log(`Rate limit ${rateLimitingException}`);
       res.status(HttpStatus.TOO_MANY_REQUESTS).send('Too Many Requests');
     }
   }

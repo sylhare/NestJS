@@ -22,7 +22,7 @@ export class RequestInfoPlugin implements ApolloServerPlugin<AppContext> {
         const elapsed = Math.round(Date.now() - start);
         const size = JSON.stringify(context.response).length * 2;
         console.log(
-          `GgraphQL Request: operataion=${operation} duration=${elapsed}ms bytes=${size}`,
+          `GraphQL Request: operation=${operation} duration=${elapsed}ms bytes=${size}`,
         );
       },
     };
