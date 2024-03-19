@@ -3,6 +3,8 @@ import { NextFunction, Request, Response } from 'express';
 import { RateLimiterRedis } from 'rate-limiter-flexible';
 import RedisMock from 'ioredis-mock';
 import { ConfigService } from '@nestjs/config';
+import { DefinitionNode, parse } from 'graphql';
+import { OperationDefinitionNode } from 'graphql/language/ast';
 
 /**
  * In AppModule, apply it using:
@@ -31,12 +33,22 @@ export class GraphqlRateLimiterMiddleware implements NestMiddleware {
     });
   }
 
-  async use(req: Request & { user: string }, res: Response, next: NextFunction) {
+  private static operationToPoints(definition: DefinitionNode): number {
+    if (definition.kind !== 'OperationDefinition') return 0;
+    const node = definition as OperationDefinitionNode;
+    return node.operation === 'mutation' ? 10 : 1;
+  }
+
+  async use(req: Request, res: Response, next: NextFunction) {
+    const user = req.body.user ?? 'anonymous';
     try {
-      await this.limiter.consume(req.user ?? 'anonymous');
+      const document = parse(req.body.query);
+      const weight = document.definitions
+        .reduce((total, current) => total + GraphqlRateLimiterMiddleware.operationToPoints(current), 0);
+      await this.limiter.consume(user, weight);
       next();
     } catch (rateLimitingException) {
-      console.log(`Rate limit ${rateLimitingException}`);
+      console.log(`Rate limit for user${user} is ${rateLimitingException}`);
       res.status(HttpStatus.TOO_MANY_REQUESTS).send('Too Many Requests');
     }
   }

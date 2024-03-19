@@ -17,16 +17,39 @@ describe('GraphQL', () => {
     app = moduleFixture.createNestApplication();
   });
 
+  afterEach(async () => {
+    await app.close();
+  });
+
   describe('Rate limiting', () => {
-    beforeEach(async () => {
+
+    it('should trigger rate limiting for query', async () => {
       process.env.RATE_LIMIT_POINTS = '0';
       await app.init();
-    });
-
-    it('should trigger rate limiting', async () => {
       const payload = await request(app.getHttpServer())
         .post('/graphql')
-        .send({ user: 'rate-limiter', query: '{ codeFirst(id: 1) { id } }' });
+        .send({ user: 'rate-limiter-query', query: '{ codeFirst(id: 1) { id } }' });
+      expect(payload.status).toEqual(429);
+    });
+
+    it('should trigger rate limiting for mutation', async () => {
+      process.env.RATE_LIMIT_POINTS = '9';
+      await app.init();
+      const payload = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({
+          user: 'rate-limiter-mutation', query: print(gql`
+                fragment query on CodeFirst { # to be misleading
+                  id
+                  exampleField
+                }
+                mutation query { # to be misleading
+                  updateCodeFirst(updateCodeFirstInput: { exampleField: "example" }) {
+                    ...query
+                  }
+                }
+              `),
+        });
       expect(payload.status).toEqual(429);
     });
   });
