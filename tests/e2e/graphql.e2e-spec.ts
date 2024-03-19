@@ -26,7 +26,7 @@ describe('GraphQL', () => {
     it('should trigger rate limiting', async () => {
       const payload = await request(app.getHttpServer())
         .post('/graphql')
-        .send({ user: 'test', query: '{ book(id: 1) { id author title } }' });
+        .send({ user: 'rate-limiter', query: '{ codeFirst(id: 1) { id } }' });
       expect(payload.status).toEqual(429);
     });
   });
@@ -77,6 +77,23 @@ describe('GraphQL', () => {
         });
       expect(payload.status).toEqual(200);
       expect(payload.body.data.codeFirst).toEqual({ id: 1, exampleField: 'example' });
+    });
+
+    it('creates code first', async () => {
+      const payload = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({
+          query: print(gql`
+            ${codeFirstFragment}
+            mutation {
+              createCodeFirst(createCodeFirstInput: { exampleField: "example" }) {
+                ...codeFirst
+              }
+            }
+          `),
+        });
+      expect(payload.status).toEqual(200);
+      expect(payload.body.data.createCodeFirst).toEqual({ id: 1, exampleField: 'example' });
     });
 
     afterEach(async () => {

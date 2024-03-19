@@ -2,7 +2,10 @@ import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { CodeFirst } from './entities/code-first.entity';
 import { CreateCodeFirstInput } from './dto/create-code-first.input';
 import { UpdateCodeFirstInput } from './dto/update-code-first.input';
+import { GraphqlInterceptor } from '../graphql-rate-limiter/graphql-interceptor.interceptor';
+import { UseInterceptors } from '@nestjs/common';
 
+@UseInterceptors(GraphqlInterceptor)
 @Resolver(() => CodeFirst)
 export class CodeFirstResolver {
 
