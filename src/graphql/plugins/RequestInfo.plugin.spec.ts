@@ -36,7 +36,6 @@ describe('Around plugins', () => {
     };
 
     const document = parse(request.query);
-    console.log('document', document);
     visit(document, visitor);
     expect(test).toHaveBeenCalledWith('codeFirst');
     expect(test).toHaveBeenCalledWith('id');

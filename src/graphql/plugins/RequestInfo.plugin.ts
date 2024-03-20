@@ -7,6 +7,7 @@ import {
 } from '@apollo/server';
 import { Plugin } from '@nestjs/apollo';
 import { AppContext } from '../../app.module';
+import { Logger } from '@nestjs/common';
 
 @Plugin()
 export class RequestInfoPlugin implements ApolloServerPlugin<AppContext> {
@@ -21,7 +22,7 @@ export class RequestInfoPlugin implements ApolloServerPlugin<AppContext> {
       async willSendResponse(context: GraphQLRequestContextWillSendResponse<AppContext>) {
         const elapsed = Math.round(Date.now() - start);
         const size = JSON.stringify(context.response).length * 2;
-        console.log(
+        new Logger('GraphQLPlugin').log(
           `GraphQL Request: operation=${operation} duration=${elapsed}ms bytes=${size}`,
         );
       },

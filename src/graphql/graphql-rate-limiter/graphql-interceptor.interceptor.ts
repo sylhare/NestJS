@@ -1,4 +1,4 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
 import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql';
 
@@ -15,14 +15,15 @@ import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql';
  */
 @Injectable()
 export class GraphqlInterceptor implements NestInterceptor {
+  private readonly logger = new Logger(GraphqlInterceptor.name);
 
   async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
     if (context.getType<GqlContextType>() === 'graphql') {
       const ctx = GqlExecutionContext.create(context);
       const request = ctx.getContext().req;
-      console.log(Object.keys(request.body));
+      this.logger.log(Object.keys(request.body));
     }
     return next.handle()
-      .pipe(tap((data) => console.log(`Data retrieved ${JSON.stringify(data)}`)));
+      .pipe(tap((data) => this.logger.log(`Data retrieved ${Object.keys(data)}`)));
   }
 }

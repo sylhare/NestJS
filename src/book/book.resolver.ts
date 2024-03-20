@@ -1,5 +1,6 @@
 import { Args, Context, Int, Query, Resolver } from '@nestjs/graphql';
 import { Book } from './entities/book.entity';
+import { Logger } from '@nestjs/common';
 
 @Resolver()
 export class BookResolver {
@@ -8,7 +9,7 @@ export class BookResolver {
     @Args('id', { type: () => Int }) id: number,
     @Context() context: { hello: string },
   ) {
-    console.log(context.hello);
+    new Logger('Resolver').log(context.hello);
     return new Book(id);
   }
 }
