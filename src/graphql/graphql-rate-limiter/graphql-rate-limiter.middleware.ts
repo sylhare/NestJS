@@ -1,7 +1,6 @@
-import { HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
-import { RateLimiterRedis } from 'rate-limiter-flexible';
-import RedisMock from 'ioredis-mock';
+import { RateLimiterMemory } from 'rate-limiter-flexible';
 import { ConfigService } from '@nestjs/config';
 import { DefinitionNode, parse } from 'graphql';
 import { OperationDefinitionNode } from 'graphql/language/ast';
@@ -19,16 +18,15 @@ import { OperationDefinitionNode } from 'graphql/language/ast';
 @Injectable()
 export class GraphqlRateLimiterMiddleware implements NestMiddleware {
 
-  private readonly limiter: RateLimiterRedis;
+  private readonly limiter: RateLimiterMemory;
+  private readonly logger = new Logger(GraphqlRateLimiterMiddleware.name);
 
   constructor(private readonly configService: ConfigService) {
-    const redisClient = new RedisMock();
 
-    this.limiter = new RateLimiterRedis({
-      storeClient: redisClient,
-      points: this.configService.get<number>('RATE_LIMIT_POINTS', 100),      // max request by duration
+    this.limiter = new RateLimiterMemory({
+      points: this.configService.get<number>('RATE_LIMIT_POINTS', 5),      // max request by duration
       duration: this.configService.get<number>('RATE_LIMIT_DURATION', 1),    // per second
-      blockDuration: this.configService.get<number>('RATE_LIMIT_BLOCK', 60), // blocks for x second once rate exceeded
+      blockDuration: this.configService.get<number>('RATE_LIMIT_BLOCK', 10), // blocks for x second once rate exceeded
       keyPrefix: 'ratelimit',
     });
   }
@@ -40,16 +38,26 @@ export class GraphqlRateLimiterMiddleware implements NestMiddleware {
   }
 
   async use(req: Request, res: Response, next: NextFunction) {
-    const user = req.body.user ?? 'anonymous';
+    const user = req.body?.user ?? 'anonymous';
+    const query = req.body?.query;
+    if (query === undefined) return next();
     try {
-      const document = parse(req.body.query);
+      const document = parse(query);
       const weight = document.definitions
         .reduce((total, current) => total + GraphqlRateLimiterMiddleware.operationToPoints(current), 0);
       await this.limiter.consume(user, weight);
-      next();
-    } catch (rateLimitingException) {
-      console.log(`Rate limit for user${user} is ${rateLimitingException}`);
-      res.status(HttpStatus.TOO_MANY_REQUESTS).send('Too Many Requests');
+      return next();
+    } catch (rateLimitResponse) {
+      this.logger.debug(`Rate limit for user ${user} is ${await this.limiter.get(user)}`);
+      return res.status(HttpStatus.TOO_MANY_REQUESTS).send({
+        errors: [{
+          message: 'Rate limit exceeded',
+          limit: rateLimitResponse,
+          extensions: {
+            code: 'TOO_MANY_REQUESTS',
+          },
+        }],
+      });
     }
   }
 }

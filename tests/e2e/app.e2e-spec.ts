@@ -27,6 +27,7 @@ describe('AppController (e2e)', () => {
     it('creates cat', () => {
       return request(app.getHttpServer())
         .post('/cats')
+        .send({ name: 'test' })
         .expect(204);
     });
 

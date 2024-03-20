@@ -1,7 +1,6 @@
 import { GraphqlRateLimiterMiddleware } from './graphql-rate-limiter.middleware';
 import { ConfigService } from '@nestjs/config';
 
-
 class ConfigServiceMock {
   env = {
     RATE_LIMIT_POINTS: undefined,
@@ -16,7 +15,7 @@ class ConfigServiceMock {
 
 describe('GraphqlRateLimiterMiddleware', () => {
   const configService = new ConfigServiceMock() as unknown as ConfigService & { env: { [key: string]: any } };
-  const req: any = () => ({ user: `test-${Math.random()}` });
+  const req: any = () => ({ body: { user: `test-${Math.random()}`, query: '{ query { test } }' } });
   const res: any = {
     status: jest.fn().mockReturnValue({ send: jest.fn() }),
   };
