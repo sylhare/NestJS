@@ -21,7 +21,7 @@ export class GraphqlInterceptor implements NestInterceptor {
     if (context.getType<GqlContextType>() === 'graphql') {
       const ctx = GqlExecutionContext.create(context);
       const request = ctx.getContext().req;
-      this.logger.log(Object.keys(request.body));
+      this.logger.debug(JSON.stringify(Object.keys(request.body)));
     }
     return next.handle()
       .pipe(tap((data) => this.logger.log(`Data retrieved ${Object.keys(data)}`)));

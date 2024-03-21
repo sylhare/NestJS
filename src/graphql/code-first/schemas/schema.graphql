@@ -50,7 +50,7 @@ input CreateCodeFirstInput {
 """Update example field input"""
 input UpdateCodeFirstInput {
   """Example field to update"""
-  exampleField: String!
+  exampleField: String
 
   """Example id to update"""
   id: Int!
