@@ -9,9 +9,16 @@ type Book {
 
   """Title of the Book"""
   title: String!
+  author: Author!
+}
+
+"""Author"""
+type Author {
+  """name of the author"""
+  name: String!
 
   """Author of the Book"""
-  author: String!
+  books: [Book!]!
 }
 
 """Code first example"""

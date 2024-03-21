@@ -1,6 +1,6 @@
 /* eslint-disable jest/expect-expect */
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, Logger } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { print } from 'graphql';
@@ -12,7 +12,9 @@ describe('GraphQL', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .setLogger(new Logger())
+      .compile();
 
     app = moduleFixture.createNestApplication();
   });
@@ -65,10 +67,10 @@ describe('GraphQL', () => {
         .post('/graphql')
         .send({
           user: 'user',
-          query: '{ book(id: 1) { id author title } }',
+          query: '{ book(id: 1) { id author { name } title } }',
         });
       expect(payload.status).toEqual(200);
-      expect(payload.body.data.book).toEqual({ id: 1, title: 'title', author: 'author' });
+      expect(payload.body.data.book).toEqual({ id: 1, title: 'title', author: { name: 'author' } });
     });
   });
 
