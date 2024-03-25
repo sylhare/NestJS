@@ -1,5 +1,5 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
+import { Logger, MiddlewareConsumer, Module } from '@nestjs/common';
+import { GraphQLModule, transformSchema } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { RequestInfoPlugin } from './plugins/RequestInfo.plugin';
@@ -11,6 +11,7 @@ const apolloDriverConfig: ApolloDriverConfig = {
   driver: ApolloDriver,
   playground: true,
   sortSchema: false,
+  allowBatchedHttpRequests: true,
   autoSchemaFile: join(process.cwd(), 'src/graphql/code-first/schemas/schema.graphql'),
   context: ({ req }): AppContext => ({ hello: `Hello ${req.body.user}` }),
   plugins: [new RequestInfoPlugin()],
