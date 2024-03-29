@@ -6,6 +6,7 @@ import { RequestInfoPlugin } from './plugins/RequestInfo.plugin';
 import { AppContext } from '../app.module';
 import { CodeFirstModule } from './code-first/code-first.module';
 import { GraphqlRateLimiterMiddleware } from './graphql-rate-limiter/graphql-rate-limiter.middleware';
+import { GraphqlComplexityService } from './graphql-complexity/graphql-complexity.service';
 
 const apolloDriverConfig: ApolloDriverConfig = {
   driver: ApolloDriver,
@@ -22,6 +23,7 @@ const apolloDriverConfig: ApolloDriverConfig = {
     GraphQLModule.forRoot(apolloDriverConfig),
     CodeFirstModule,
   ],
+  providers: [GraphqlComplexityService],
 })
 export class GraphqlModule {
   static addGraphQLRateLimiter(consumer: MiddlewareConsumer) {
