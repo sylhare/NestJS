@@ -19,42 +19,91 @@ describe('GraphqlComplexityService', () => {
     expect(service).toBeDefined();
   });
 
+  describe('depth calculation', () => {
+
+    it('should calculate depth of query', () => {
+      const query = gql`
+              query {
+                book(id: 1) {
+                  id
+                  author {
+                    books {
+                      author {
+                        books {
+                          title
+                          author {
+                            name
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            `;
+      expect(depth(query)).toEqual(8);
+
+    });
+
+    function depth(node: ASTNode, level = 1) {
+      switch (node.kind) {
+        case 'Document':
+          // If it's a document, then traverse all its definitions
+          return Math.max(0, ...node.definitions.map(definition => depth(definition, level)));
+        case 'OperationDefinition':
+          // If it's an operation or a selection, traverse all its selection set's selections
+          return Math.max(0, ...node.selectionSet.selections.map(selection => depth(selection, level + 1)));
+        case 'SelectionSet':
+          // If it's an operation or a selection, traverse all its selections
+          return Math.max(0, ...node.selections.map(selection => depth(selection, level + 1)));
+        case 'Field':
+          // If it's a field, traverse its selection set
+          return node.selectionSet
+            ? depth(node.selectionSet, level)
+            : level;
+        default:
+          // By default, return the received level
+          return level;
+      }
+    }
+  });
+
   describe('duplicate fields', () => {
 
     it('should be defined', () => {
       const query = gql`
-        fragment codeFirst on CodeFirst {
-          __typename
-          __typename
-        }
-        query {
-          codeFirst(id: 1) {
-            __typename
-            __typename
-            ...codeFirst
-            ... on CodeFirst {
-              __typename
-              __typename
-            }
-          }
-        }
-      `;
+              fragment codeFirst on CodeFirst {
+                __typename
+                __typename
+              }
+              query {
+                codeFirst(id: 1) {
+                  __typename
+                  __typename
+                  ...codeFirst
+                  ... on CodeFirst {
+                    __typename
+                    __typename
+                  }
+                }
+              }
+            `;
       resetCaches(); // No need for the gql cache in this test
       expect(print(removeDuplicateFields(query))).toEqual(print(gql`
-        fragment codeFirst on CodeFirst {
-          __typename
-        }
+              fragment codeFirst on CodeFirst {
+                __typename
+              }
 
-        {
-          codeFirst(id: 1) {
-            __typename
-            ...codeFirst
-            ... on CodeFirst {
-              __typename
-            }
-          }
-        }
-      `));
+              {
+                codeFirst(id: 1) {
+                  __typename
+                  ...codeFirst
+                  ... on CodeFirst {
+                    __typename
+                  }
+                }
+              }
+            `));
     });
 
     function removeDuplicateFields(document: DocumentNode) {
