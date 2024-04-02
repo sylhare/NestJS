@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GraphqlComplexityService } from './graphql-complexity.service';
-import { DocumentNode, SelectionNode } from 'graphql/index';
+import { GraphQLComplexityService } from './graphql-complexity.service';
+import { ASTNode, DocumentNode, SelectionNode } from 'graphql/index';
 import { print, visit } from 'graphql/language';
 import { gql, resetCaches } from 'graphql-tag';
 
-describe('GraphqlComplexityService', () => {
-  let service: GraphqlComplexityService;
+describe('GraphQLComplexityService', () => {
+  let service: GraphQLComplexityService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [GraphqlComplexityService],
+      providers: [GraphQLComplexityService],
     }).compile();
 
-    service = module.get<GraphqlComplexityService>(GraphqlComplexityService);
+    service = module.get<GraphQLComplexityService>(GraphQLComplexityService);
   });
 
   it('should be defined', () => {
