@@ -2,7 +2,9 @@ import { HttpStatus, Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
 import { ConfigService } from '@nestjs/config';
-import { parse } from 'graphql';
+import { DefinitionNode, parse } from 'graphql';
+import { OperationDefinitionNode, print } from 'graphql/language';
+import { GraphQLComplexityService } from '../graphql-complexity/graphql-complexity.service';
 
 /**
  * In AppModule, apply it using:
@@ -19,6 +21,7 @@ export class GraphqlRateLimiterMiddleware implements NestMiddleware {
 
   private readonly limiter: RateLimiterMemory;
   private readonly logger = new Logger(GraphqlRateLimiterMiddleware.name);
+  private readonly complexityService = new GraphQLComplexityService();
 
   constructor(private readonly configService: ConfigService) {
 
@@ -37,7 +40,9 @@ export class GraphqlRateLimiterMiddleware implements NestMiddleware {
   private async handleRateLimit(req: Request, res: Response, next: NextFunction) {
     const user = req.body?.user ?? 'anonymous';
     try {
-      await this.limiter.consume(user, 1);
+      const status = this.complexityService.calculateComplexity(req);
+      this.logger.verbose(JSON.stringify(status));
+      await this.limiter.consume(user, status.cost);
       return next();
     } catch (rateLimitResponse) {
       this.logger.debug(`Rate limit for user ${user} is ${await this.limiter.get(user)} - ${rateLimitResponse}`);
