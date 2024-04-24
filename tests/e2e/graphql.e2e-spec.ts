@@ -17,6 +17,7 @@ describe('GraphQL', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
+    process.env.RATE_LIMIT_POINTS = '100';
   });
 
   afterEach(async () => {
