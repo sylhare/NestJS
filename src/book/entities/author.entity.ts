@@ -10,7 +10,12 @@ export class Author {
   @IsNotRobert()
   @Field({ description: 'name of the author' })
   name: string;
-  @Field(() => [Book], { description: 'Author of the Book' })
+
+  /**
+   * Resolve via field resolver
+   * No need for:
+   * @Field(() => [Book], { description: 'Books of the author' })
+   */
   books: Book[];
 
   constructor(name?: string) {

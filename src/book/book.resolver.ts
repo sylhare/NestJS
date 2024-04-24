@@ -15,7 +15,7 @@ export class BookResolver {
     return new Book(id);
   }
 
-  @ResolveField('author', () => Author)
+  @ResolveField('author', () => Author, { description: 'The author of the book' })
   async getAuthor() {
     return new Author();
   }
@@ -24,7 +24,7 @@ export class BookResolver {
 @Resolver(() => Author)
 export class AuthorResolver {
 
-  @ResolveField('books', () => [Book])
+  @ResolveField('books', () => [Book], { description: 'Books of the author' })
   async getBooks(@Parent() author: Author): Promise<Book[]> {
     return author.books;
   }

@@ -9,6 +9,8 @@ type Book {
 
   """Title of the Book"""
   title: String!
+
+  """The author of the book"""
   author: Author!
 }
 
@@ -17,7 +19,7 @@ type Author {
   """name of the author"""
   name: String!
 
-  """Author of the Book"""
+  """Books of the author"""
   books: [Book!]!
 }
 
@@ -37,8 +39,13 @@ type Query {
 }
 
 type Mutation {
+  createAuthor(input: CreateAuthorInput!): Author!
   createCodeFirst(createCodeFirstInput: CreateCodeFirstInput!): CodeFirst!
   updateCodeFirst(updateCodeFirstInput: UpdateCodeFirstInput!): CodeFirst!
+}
+
+input CreateAuthorInput {
+  name: String!
 }
 
 """New example field input"""
