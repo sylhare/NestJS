@@ -35,4 +35,18 @@ describe('Book and Author', () => {
       expect(payload.body.data.book).toEqual({ id: 1, title: 'title', author: { name: 'author' } });
     });
   });
+  describe('Author', () => {
+
+    it('can create an author', async () => {
+      const payload = await request(app.getHttpServer())
+        .post('/graphql')
+        .send({
+          user: 'user',
+          query: 'mutation createAuthor($input: CreateAuthorInput!) { createAuthor(input: $input) { name } }',
+          variables: { input: { name: 'author' } },
+        });
+      expect(payload.status).toEqual(200);
+      expect(payload.body.data.createAuthor.name).toEqual('author');
+    });
+  });
 });
