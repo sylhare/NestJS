@@ -1,8 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 
 export const validationPipe = new ValidationPipe({
+  whitelist: true,
+  transform: true,
 });
 
 async function bootstrap() {
