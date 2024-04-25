@@ -10,7 +10,7 @@ describe('Author', () => {
     expect(errors).toHaveLength(0);
   });
 
-  it('can not be name Robert 🥲', async () => {
+  it('can not be named Robert 🥲', async () => {
     const author = new Author('Robert');
 
     await validate(author).then(errors => {
