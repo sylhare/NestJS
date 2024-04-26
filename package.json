@@ -5,6 +5,7 @@
   "scripts": {
     "build": "nest build",
     "test": "jest --coverage",
+    "test:fail": "jest 2>&1 | grep '●'",
     "test:e2e": "jest --config ./jest.config.e2e.ts",
     "test:unit": "jest --config ./jest.config.unit.ts",
     "lint": "eslint --ext .ts src",
