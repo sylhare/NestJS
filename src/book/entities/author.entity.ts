@@ -1,10 +1,9 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Book } from './book.entity';
-import { IsNotRobert } from '../dto/create-author.dto';
 
 @ObjectType({ description: 'Author' })
 export class Author {
-  @IsNotRobert()
+
   @Field({ description: 'name of the author' })
   name: string;
 
