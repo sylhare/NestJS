@@ -5,15 +5,36 @@ import { Field, InputType } from '@nestjs/graphql';
 export class CreateAuthorInput {
 
   @IsNotEmpty()
+  @IsLongEnough()
   @IsNotRobert()
   @Field(() => String)
   name: string;
 }
 
+export function IsLongEnough(validationOptions?: ValidationOptions) {
+  return function (object: Object, propertyName: string) {
+    registerDecorator({
+      name: 'isLongEnough',
+      target: object.constructor,
+      propertyName: propertyName,
+      constraints: [],
+      options: {
+        message: 'name is too short',
+        ...validationOptions,
+      },
+      validator: {
+        validate(value: any) {
+          return value.length > 3;
+        },
+      },
+    });
+  };
+}
+
 export function IsNotRobert(validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
-      name: 'IsNotRobert',
+      name: 'isNotRobert',
       target: object.constructor,
       propertyName: propertyName,
       constraints: [],
