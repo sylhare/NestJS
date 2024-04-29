@@ -1,7 +1,8 @@
-import { Args, Context, Int, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Book } from './entities/book.entity';
 import { Logger } from '@nestjs/common';
 import { Author } from './entities/author.entity';
+import { CreateAuthorInput } from './dto/create-author.dto';
 
 @Resolver(() => Book)
 export class BookResolver {
@@ -14,7 +15,7 @@ export class BookResolver {
     return new Book(id);
   }
 
-  @ResolveField('author', () => Author)
+  @ResolveField('author', () => Author, { description: 'The author of the book' })
   async getAuthor() {
     return new Author();
   }
@@ -23,8 +24,13 @@ export class BookResolver {
 @Resolver(() => Author)
 export class AuthorResolver {
 
-  @ResolveField('books', () => [Book])
+  @ResolveField('books', () => [Book], { description: 'Books of the author' })
   async getBooks(@Parent() author: Author): Promise<Book[]> {
     return author.books;
+  }
+
+  @Mutation(() => Author)
+  async createAuthor(@Args('input') input: CreateAuthorInput): Promise<Author> {
+    return new Author(input.name);
   }
 }

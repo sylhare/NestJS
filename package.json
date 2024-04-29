@@ -5,6 +5,7 @@
   "scripts": {
     "build": "nest build",
     "test": "jest --coverage",
+    "test:fail": "jest 2>&1 | grep '●'",
     "test:e2e": "jest --config ./jest.config.e2e.ts",
     "test:unit": "jest --config ./jest.config.unit.ts",
     "lint": "eslint --ext .ts src",
@@ -47,6 +48,8 @@
     "@nestjs/graphql": "^12.1.1",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^10.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
     "rate-limiter-flexible": "^5.0.0",

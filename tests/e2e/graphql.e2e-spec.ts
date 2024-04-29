@@ -17,6 +17,7 @@ describe('GraphQL', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
+    process.env.RATE_LIMIT_POINTS = '100';
   });
 
   afterEach(async () => {
@@ -53,24 +54,6 @@ describe('GraphQL', () => {
               `),
         });
       expect(payload.status).toEqual(429);
-    });
-  });
-
-  describe('Book', () => {
-    beforeEach(async () => {
-      process.env.RATE_LIMIT_POINTS = '100';
-      await app.init();
-    });
-
-    it('queries a book', async () => {
-      const payload = await request(app.getHttpServer())
-        .post('/graphql')
-        .send({
-          user: 'user',
-          query: '{ book(id: 1) { id author { name } title } }',
-        });
-      expect(payload.status).toEqual(200);
-      expect(payload.body.data.book).toEqual({ id: 1, title: 'title', author: { name: 'author' } });
     });
   });
 

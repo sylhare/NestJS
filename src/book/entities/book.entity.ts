@@ -6,7 +6,11 @@ export class Book {
   id: number;
   @Field({ description: 'Title of the Book' })
   title: string;
-  @Field({ description: 'Author of the Book' })
+  /**
+   * Resolve via field resolver
+   * No need for:
+   * @Field({ description: 'Author of the Book' })
+   */
   author: string;
 
   constructor(id: number) {

@@ -22,7 +22,7 @@ Run the project with:
 npm start
 ```
 
-It should be available at [localhost:3000](http://localhost:3000).
+It should be available at [localhost:3001](http://localhost:3001).
 
 Test the project using *Jest*:
 
