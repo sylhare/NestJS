@@ -1,15 +1,17 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from '../../src/app.module';
 import * as request from 'supertest';
 import { validationPipe } from '../../src/main';
+import { AppTestingModule } from './utils/AppTestingModule';
+import { AuthorResolver, BookResolver } from '../../src/book/book.resolver';
 
 describe('Book and Author', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppTestingModule],
+      providers: [BookResolver, AuthorResolver],
     })
       .compile();
 

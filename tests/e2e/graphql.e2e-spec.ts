@@ -1,4 +1,3 @@
-/* eslint-disable jest/expect-expect */
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, Logger } from '@nestjs/common';
 import * as request from 'supertest';
