@@ -15,7 +15,8 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "graphql:generate": "ts-node src/graphql/schema-first/schemas/generate-typings.ts",
-    "graphql:print": "ts-node src/graphql/code-first/schemas/generate-schema.ts"
+    "graphql:print": "ts-node src/graphql/code-first/schemas/generate-schema.ts",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d src/typeorm/datasource.ts"
   },
   "author": "",
   "license": "MIT",
@@ -48,11 +49,15 @@
     "@nestjs/graphql": "^12.1.1",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/typeorm": "^10.0.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "dotenv": "^16.4.5",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
+    "pg": "^8.11.5",
     "rate-limiter-flexible": "^5.0.0",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "typeorm": "^0.3.20"
   }
 }
