@@ -6,6 +6,7 @@ import { ModuleB } from './nested/b/b.module';
 import { AuthorResolver, BookResolver } from './book/book.resolver';
 import { ConfigService } from '@nestjs/config';
 import { GraphqlModule } from './graphql/graphql.module';
+import { DatabaseModule } from './typeorm/database.module';
 
 export type AppContext = { hello: string };
 
@@ -14,6 +15,7 @@ export type AppContext = { hello: string };
     CatsModule,
     ModuleB,
     GraphqlModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [

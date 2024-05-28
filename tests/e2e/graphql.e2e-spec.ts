@@ -91,13 +91,13 @@ describe('GraphQL', () => {
         .post('/graphql')
         .send({
           query: print(gql`
-            ${codeFirstFragment}
-            mutation {
-              createCodeFirst(createCodeFirstInput: { exampleField: "example" }) {
-                ...codeFirst
-              }
-            }
-          `),
+                  ${codeFirstFragment}
+                  mutation {
+                    createCodeFirst(createCodeFirstInput: { exampleField: "example" }) {
+                      ...codeFirst
+                    }
+                  }
+                `),
         });
       expect(payload.status).toEqual(200);
       expect(payload.body.data.createCodeFirst).toEqual({ id: 1, exampleField: 'example' });
