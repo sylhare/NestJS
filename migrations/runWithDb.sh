@@ -7,6 +7,7 @@ then
 fi
 source .env.local
 echo "Running migrations"
+# create a new migration with  yarn typeorm migration:generate migrations/NameOfMigration
 yarn typeorm schema:drop
 yarn typeorm migration:run
 echo "Start application"
