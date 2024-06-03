@@ -4,9 +4,10 @@ import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { print } from 'graphql';
 import { gql } from 'graphql-tag';
+import { DataSource } from 'typeorm/data-source/DataSource';
 
 describe('GraphQL', () => {
-  let app: INestApplication;
+  let app: INestApplication, connection: DataSource;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -16,6 +17,7 @@ describe('GraphQL', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
+    connection = app.get(DataSource);
     process.env.RATE_LIMIT_POINTS = '100';
   });
 
@@ -54,6 +56,67 @@ describe('GraphQL', () => {
         });
       expect(payload.status).toEqual(429);
     });
+  });
+
+  describe('typeorm', () => {
+    beforeEach(async () => app.init());
+    afterEach(async () => {
+      await connection.dropDatabase();
+      await app.close();
+    });
+
+    it('creates a new user', async () => {
+      await request(app.getHttpServer())
+        .post('/graphql')
+        .send({
+          query: print(gql`
+            mutation createUser($input: CreateUserInput!) {
+              createUser(input: $input) {
+                id
+                name
+              }
+            }
+          `),
+          variables: { input: { name: 'user' } },
+        })
+        .expect(200)
+        .expect(res => {
+          expect(res.body.data.createUser).toEqual({ id: expect.anything(), name: 'user' });
+        });
+    });
+
+    it('queries all users', async () => {
+      await request(app.getHttpServer())
+        .post('/graphql')
+        .send({
+          query: print(gql`
+              mutation createUser($input: CreateUserInput!) {
+                createUser(input: $input) {
+                  id
+                  name
+                }
+              }
+            `),
+          variables: { input: { name: 'user' } },
+        });
+      await request(app.getHttpServer())
+        .post('/graphql')
+        .send({
+          query: print(gql`
+              query {
+                users {
+                  id
+                  name
+                }
+              }
+            `),
+        })
+        .expect(200)
+        .expect(res => {
+          expect(res.body.data.users).toEqual([{ id: expect.anything(), name: 'user' }]);
+        });
+    });
+
   });
 
   describe('codeFirst', () => {
