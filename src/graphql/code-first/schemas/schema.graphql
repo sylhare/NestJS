@@ -32,16 +32,23 @@ type CodeFirst {
   exampleField: String!
 }
 
+type User {
+  id: Float!
+  name: String!
+}
+
 type Query {
   book(id: Int!): Book!
   codeFirsts: [CodeFirst!]!
   codeFirst(id: Int!): CodeFirst!
+  users: [User!]!
 }
 
 type Mutation {
   createAuthor(input: CreateAuthorInput!): Author!
   createCodeFirst(createCodeFirstInput: CreateCodeFirstInput!): CodeFirst!
   updateCodeFirst(updateCodeFirstInput: UpdateCodeFirstInput!): CodeFirst!
+  createUser(input: CreateUserInput!): User!
 }
 
 input CreateAuthorInput {
@@ -61,4 +68,8 @@ input UpdateCodeFirstInput {
 
   """Example id to update"""
   id: Int!
+}
+
+input CreateUserInput {
+  name: String!
 }
