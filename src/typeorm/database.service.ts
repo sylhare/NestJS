@@ -12,11 +12,9 @@ export class DatabaseService {
   ) {}
 
   async createUser(name: string): Promise<User> {
-    const user = new User();
-    user.name = name;
-    await this.userRepository.save(user);
-    this.logger.log(`User created: ${name}`);
-    return user;
+    const user = this.userRepository.create({ name });
+    this.logger.log(`Creating user: ${JSON.stringify(user)}`);
+    return await this.userRepository.save(user);
   }
 
   async getUsers(): Promise<User[]> {
