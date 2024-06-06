@@ -12,12 +12,12 @@ import datasource from './datasource';
   imports: [
     // TypeOrmModule.forRoot(dataSourceOptions),
     TypeOrmModule.forRootAsync({
-      useFactory: async () =>
-        Object.assign(datasource.options, {
-          migrations: [],
-          entities: [],
-          autoLoadEntities: true,
-        }),
+      useFactory: async () => ({
+        ...datasource.options,
+        migrations: [],
+        entities: [],
+        autoLoadEntities: true,
+      }),
     }),
     TypeOrmModule.forFeature([User, Home, Job, UserToJob]),
   ],
