@@ -12,8 +12,8 @@ import { UserToJob } from './user-to-job.entity';
 
 @Entity('nest_users')
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ length: 500, nullable: true })
   name: string;

@@ -33,7 +33,7 @@ type CodeFirst {
 }
 
 type User {
-  id: Float!
+  id: String!
   name: String!
 }
 

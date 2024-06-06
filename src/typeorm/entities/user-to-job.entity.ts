@@ -8,7 +8,7 @@ export class UserToJob {
   id: number;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @Column()
   jobId: number;
