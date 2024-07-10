@@ -11,5 +11,4 @@ export class Job {
 
   @OneToMany(() => UserToJob, (userToJob) => userToJob.job)
   jobToUsers: UserToJob[];
-
 }
