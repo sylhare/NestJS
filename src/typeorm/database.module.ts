@@ -6,6 +6,7 @@ import { User } from './entities/user.entity';
 import { Home } from './entities/home.entity';
 import { Job } from './entities/job.entity';
 import { UserToJob } from './entities/user-to-job.entity';
+import { Role } from './entities/role.entity';
 import datasource from './datasource';
 
 @Module({
@@ -19,7 +20,7 @@ import datasource from './datasource';
         autoLoadEntities: true,
       }),
     }),
-    TypeOrmModule.forFeature([User, Home, Job, UserToJob]),
+    TypeOrmModule.forFeature([User, Home, Job, Role, UserToJob]),
   ],
   providers: [UserResolver, DatabaseService],
 })
