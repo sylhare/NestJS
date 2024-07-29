@@ -8,6 +8,16 @@ describe('CatsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [CatsModule],
+      // To mock a dependant service
+      // providers: [
+      //   {
+      //     provide: CatsService,
+      //     useValue: {
+      //       create: jest.fn().mockResolvedValue(),
+      //       findAll: jest.fn().mockResolvedValue([]),
+      //     },
+      //   },
+      // ],
     }).compile();
 
     controller = module.get<CatsController>(CatsController);
